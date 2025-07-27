@@ -70,7 +70,7 @@ pub fn LandingPage() -> impl IntoView {
             </section>
 
             <footer class="py-12 text-center text-gray-600 text-sm border-t border-gray-800">
-                "© 2025 PouCoLab. All rights reserved."
+                "© 2025 Grégoire Naisse. All rights reserved."
             </footer>
         </main>
     }
