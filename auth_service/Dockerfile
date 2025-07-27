@@ -19,7 +19,7 @@ COPY ./auth_service/migrations ./auth_service/migrations
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 RUN chown appuser:appgroup /auth_service -R
 
-EXPOSE 4200
+EXPOSE $APP_PORT
 
 USER appuser
 

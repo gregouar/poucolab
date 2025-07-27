@@ -19,7 +19,7 @@ COPY ./data_service/migrations ./data_service/migrations
 RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 RUN chown appuser:appgroup /data_service -R
 
-EXPOSE 4201
+EXPOSE $APP_PORT
 
 USER appuser
 

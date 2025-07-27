@@ -21,11 +21,12 @@ services:
       dockerfile: ./auth_service/Dockerfile
     restart: always
     healthcheck:
-      test: curl --fail http://auth-service:4200 || exit 1
+      test: curl --fail http://auth-service:$APP_PORT || exit 1
       interval: 30s
       timeout: 10s
       retries: 5
     environment:
+      APP_PORT: 4200
       DATABASE_URL: postgres://app:${POSTGRES_PASSWORD}@db-users/db
       DATA_SERVICE_URL: http://data-service:4201
     networks:
@@ -40,11 +41,12 @@ services:
       dockerfile: ./data_service/Dockerfile
     restart: always
     healthcheck:
-      test: curl --fail http://data-service:4201 || exit 1
+      test: curl --fail http://data-service:$APP_PORT || exit 1
       interval: 30s
       timeout: 10s
       retries: 5
     environment:
+      APP_PORT: 4201
       DATABASE_URL: postgres://app:${POSTGRES_PASSWORD}@db-data/db
     networks:
       - backend_net
