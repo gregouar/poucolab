@@ -4,3 +4,19 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+shared = { path = "../shared" }
+
+anyhow = "1.0.97"
+
+leptos = { version = "0.7.7", features = ["csr"] }
+leptos_router = "0.7.8"
+leptos_meta = "0.7.8"
+leptos-use = { version = "0.15.7", features = ["storage"] }
+leptos_toaster = "0.2.0"
+
+console_error_panic_hook = "0.1.7"
+reqwest = "0.12.12"
+url = "2.5.4"
+
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"

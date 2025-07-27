@@ -5,6 +5,7 @@
     "--rustfmt"
   ],
   "cSpell.words": [
-    "chrono"
+    "chrono",
+    "leptos"
   ]
 }
