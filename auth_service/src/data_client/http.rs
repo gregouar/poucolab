@@ -1,3 +1,4 @@
+use serde::de::DeserializeOwned;
 use std::sync::Arc;
 
 use shared::rest::test_api::GetTestDataResponse;
@@ -17,6 +18,23 @@ impl HttpDataClient {
             base_url: Arc::new(base_url),
         }
     }
+
+    async fn get<T>(&self, url: &str) -> Result<T, anyhow::Error>
+    where
+        T: DeserializeOwned,
+    {
+        let response = self
+            .client
+            .get(format!("{}{}", self.base_url, url))
+            .send()
+            .await?;
+
+        if response.status().is_success() {
+            Ok(response.json::<T>().await?)
+        } else {
+            Err(anyhow::anyhow!("failed to fetch data from {}", url))
+        }
+    }
 }
 
 impl DataServiceClient for HttpDataClient {
@@ -31,12 +49,6 @@ impl DataServiceClient for HttpDataClient {
     }
 
     async fn get_data(&self) -> Result<GetTestDataResponse, anyhow::Error> {
-        Ok(self
-            .client
-            .get(format!("{}/data", self.base_url))
-            .send()
-            .await?
-            .json::<GetTestDataResponse>()
-            .await?)
+        self.get("/data").await
     }
 }
