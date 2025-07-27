@@ -1,5 +1,3 @@
-use anyhow::Result;
-
 use leptos::{html::*, prelude::*};
 
 #[component]
@@ -7,7 +5,7 @@ pub fn LandingPage() -> impl IntoView {
     view! {
         <main class="min-h-screen bg-gradient-to-br from-slate-950 to-gray-900 text-white font-sans">
             <header class="w-full py-6 px-6 flex justify-between items-center border-b border-gray-800">
-                <h1 class="text-2xl font-semibold tracking-tight">"SciData"</h1>
+                <h1 class="text-2xl font-semibold tracking-tight">"PouCoLab"</h1>
                 <nav class="space-x-6">
                     <a href="/features" class="hover:text-blue-400">
                         "Features"
@@ -72,7 +70,7 @@ pub fn LandingPage() -> impl IntoView {
             </section>
 
             <footer class="py-12 text-center text-gray-600 text-sm border-t border-gray-800">
-                "© 2025 SciData. All rights reserved."
+                "© 2025 PouCoLab. All rights reserved."
             </footer>
         </main>
     }

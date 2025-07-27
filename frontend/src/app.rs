@@ -5,7 +5,7 @@ use leptos_router::path;
 use leptos_toaster::*;
 use url::Url;
 
-use crate::components::pages;
+use crate::pages;
 
 // TODO: localization https://crates.io/crates/fluent-templates
 
