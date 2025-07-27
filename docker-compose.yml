@@ -1,0 +1,87 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: gateway
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt/live/poucolab.gregoirenaisse.be/fullchain.pem:/etc/nginx/ssl/fullchain.pem
+      - /etc/letsencrypt/live/poucolab.gregoirenaisse.be/privkey.pem:/etc/nginx/ssl/privkey.pem
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    networks:
+      - backend_net
+
+  auth-service:
+    image: auth_service:latest
+    container_name: auth_service
+    build:
+      context: ./
+      dockerfile: ./auth_service/Dockerfile
+    restart: always
+    healthcheck:
+      test: curl --fail http://auth-service:4200 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    environment:
+      DATABASE_URL: postgres://app:${POSTGRES_PASSWORD}@db-users/db
+      DATA_SERVICE_URL: http://data-service:4201
+    networks:
+      - backend_net
+
+      
+  data-service:
+    image: data_service:latest
+    container_name: data_service
+    build:
+      context: ./
+      dockerfile: ./data_service/Dockerfile
+    restart: always
+    healthcheck:
+      test: curl --fail http://data-service:4201 || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    environment:
+      DATABASE_URL: postgres://app:${POSTGRES_PASSWORD}@db-data/db
+    networks:
+      - backend_net
+
+  db-users:
+    image: postgres:15
+    container_name: db-users
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgusers:/var/lib/postgresql/data
+    networks:
+      - backend_net
+
+  db-data:
+    image: postgres:15
+    container_name: db-data
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend_net
+
+volumes:
+  pgusers:
+  pgdata:
+
+networks:
+  backend_net:

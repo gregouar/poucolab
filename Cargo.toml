@@ -1,0 +1,11 @@
+[workspace]
+
+members = [
+    "auth_service",
+    "frontend",
+    "shared",
+    "data_service",
+    "backend_common",
+]
+
+resolver = "3"
