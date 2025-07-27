@@ -1,4 +1,7 @@
 use leptos::{html::*, prelude::*};
+use leptos_fluent::move_tr;
+
+use crate::components::LanguageSelector;
 
 #[component]
 pub fn LandingPage() -> impl IntoView {
@@ -22,28 +25,30 @@ pub fn LandingPage() -> impl IntoView {
                     >
                         "Sign Up"
                     </a>
+
+                    <LanguageSelector />
                 </nav>
             </header>
 
             <section class="text-center py-24 px-4 max-w-4xl mx-auto">
                 <h2 class="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
-                    "Structure Scientific Data Collaboratively"
+                    {move_tr!("landing-tagline")}
                 </h2>
                 <p class="text-lg md:text-2xl text-gray-300 mb-10">
-                    "Build, edit, and share structured measurement datasets across your research teams. Traceable, collaborative, and offline-capable."
+                    {move_tr!("landing-description")}
                 </p>
                 <div class="flex justify-center space-x-4">
                     <a
                         href="/signup"
                         class="px-6 py-3 rounded-md bg-blue-600 hover:bg-blue-500 transition text-lg"
                     >
-                        "Start Free"
+                        {move_tr!("cta-signup")}
                     </a>
                     <a
                         href="/demo"
                         class="px-6 py-3 rounded-md border border-gray-500 hover:bg-gray-800 transition text-lg"
                     >
-                        "View Demo"
+                        {move_tr!("cta-demo")}
                     </a>
                 </div>
             </section>
