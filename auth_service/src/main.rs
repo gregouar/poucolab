@@ -9,7 +9,7 @@ use tower_http::{
 };
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use auth_service::{data_client::HttpDataClient, rest, AppState};
+use auth_service::{data_service::DataServiceClient, rest, AppState};
 use backend_common::db::pool;
 
 #[tokio::main]
@@ -47,7 +47,7 @@ async fn main() {
             .unwrap()])
         .allow_methods([Method::GET, Method::POST]);
 
-    let data_client = HttpDataClient::new(
+    let data_service_client = DataServiceClient::new(
         std::env::var("DATA_SERVICE_URL").expect("missing 'DATA_SERVICE_URL' setting"),
     );
 
@@ -56,7 +56,7 @@ async fn main() {
         .merge(rest::routes())
         .with_state(AppState {
             db_pool,
-            data_client,
+            data_service_client,
         })
         .layer(tracer_layer)
         .layer(cors_layer);

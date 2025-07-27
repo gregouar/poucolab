@@ -2,12 +2,12 @@ use axum::extract::FromRef;
 
 pub use backend_common::db::DbPool;
 
-use crate::data_client::HttpDataClient;
+use crate::data_service::DataServiceClient;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
     pub db_pool: DbPool,
-    pub data_client: HttpDataClient,
+    pub data_service_client: DataServiceClient,
 }
 
 impl FromRef<AppState> for DbPool {
@@ -16,8 +16,8 @@ impl FromRef<AppState> for DbPool {
     }
 }
 
-impl FromRef<AppState> for HttpDataClient {
-    fn from_ref(app_state: &AppState) -> HttpDataClient {
-        app_state.data_client.clone()
+impl FromRef<AppState> for DataServiceClient {
+    fn from_ref(app_state: &AppState) -> DataServiceClient {
+        app_state.data_service_client.clone()
     }
 }
