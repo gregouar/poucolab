@@ -13,7 +13,7 @@ fn I18nProvider(children: Children) -> impl IntoView {
     leptos_fluent! {
         children: children(),
         locales: "./locales",
-        default_language: "en",
+        default_language: "en-gb",
 
         // Client side options
         // -------------------

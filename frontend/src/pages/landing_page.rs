@@ -9,25 +9,27 @@ pub fn LandingPage() -> impl IntoView {
         <main class="min-h-screen bg-gradient-to-br from-slate-950 to-gray-900 text-white font-sans">
             <header class="w-full py-6 px-6 flex justify-between items-center border-b border-gray-800">
                 <h1 class="text-2xl font-semibold tracking-tight">"PouCoLab"</h1>
-                <nav class="space-x-6">
-                    <a href="/features" class="hover:text-blue-400">
-                        "Features"
-                    </a>
-                    <a href="/pricing" class="hover:text-blue-400">
-                        "Pricing"
-                    </a>
-                    <a href="/login" class="hover:text-blue-400">
-                        "Sign In"
-                    </a>
-                    <a
-                        href="/signup"
-                        class="ml-4 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-500 transition"
-                    >
-                        "Sign Up"
-                    </a>
-
+                <div class="flex items-center space-x-4">
                     <LanguageSelector />
-                </nav>
+                    <nav class="space-x-6">
+                        <a href="/features" class="hover:text-blue-400">
+                            "Features"
+                        </a>
+                        <a href="/pricing" class="hover:text-blue-400">
+                            "Pricing"
+                        </a>
+                        <a href="/login" class="hover:text-blue-400">
+                            "Sign In"
+                        </a>
+                        <a
+                            href="/signup"
+                            class="ml-4 px-4 py-2 bg-blue-600 rounded-md hover:bg-blue-500 transition"
+                        >
+                            "Sign Up"
+                        </a>
+
+                    </nav>
+                </div>
             </header>
 
             <section class="text-center py-24 px-4 max-w-4xl mx-auto">

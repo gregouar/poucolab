@@ -1,137 +1,95 @@
 use std::collections::HashMap;
 
-use leptos::prelude::*;
+use leptos::{logging::log, prelude::*};
 use leptos_use::on_click_outside;
 
-// #[component]
-// pub fn DropdownMenu(options: Vec<(String, String)>) -> impl IntoView {
-//     let open = SignalRw::new(false);
-
-//     let toggle = move |_| open.update(|v| *v = !*v);
-
-//     view! {
-//         <div class="relative inline-block text-left">
-//             <button
-//                 class="inline-flex justify-center w-full px-3 py-2 text-sm font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700 transition"
-//                 aria-haspopup="true"
-//                 on:click=toggle
-//             >
-//                 <svg class="ml-2 h-4 w-4 fill-current" viewBox="0 0 20 20">
-//                     <path d="M5.25 7.5L10 12.25L14.75 7.5H5.25Z" />
-//                 </svg>
-//             </button>
-
-//             <div
-//                 class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 transition-all duration-150 ease-out"
-//                 class:hidden=move || !open.get()
-//             >
-//                 <div class="py-1 text-gray-900 text-sm">{children()}</div>
-//             </div>
-//         </div>
-//     }
-// }
-
 #[component]
-pub fn DropdownMenu<T>(
-    options: HashMap<T, &'static str>,
-    chosen_option: RwSignal<T>,
-) -> impl IntoView
+pub fn DropdownMenu<T>(options: HashMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
 where
-    T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
+    T: std::fmt::Debug + Clone + std::hash::Hash + Eq + Send + Sync + 'static,
 {
     let node_ref = NodeRef::new();
-
     let is_open = RwSignal::new(false);
 
-    let toggle = move |_| {
-        is_open.update(|open| *open = !*open);
-    };
-
-    let _ = on_click_outside(node_ref, move |_| {
+    let toggle = move |_| is_open.update(|open| *open = !*open);
+    let _ = on_click_outside(node_ref, move |_| is_open.set(false));
+    let select_option = move |opt| {
         is_open.set(false);
-    });
-
-    let select_option = {
-        move |opt| {
-            is_open.set(false);
-            chosen_option.set(opt);
-        }
+        chosen_option.set(opt);
     };
 
     view! {
         <style>
             ".dropdown-transition {
-            opacity: 0;
-            transform: scaleY(0.5);
-            transform-origin: top;
-            transition: all 150ms ease-out;
-            pointer-events: none;
+                opacity: 0;
+                transform: scaleY(0.95);
+                transform-origin: top;
+                transition: all 180ms ease;
+                pointer-events: none;
             }
             
             .dropdown-transition.open {
-            opacity: 1;
-            transform: scaleY(1);
-            pointer-events: auto;
+                opacity: 1;
+                transform: scaleY(1);
+                pointer-events: auto;
             }
             
             ul::-webkit-scrollbar {
-            width: 8px;
+                width: 8px;
             }
             
             ul::-webkit-scrollbar-track {
-            background: #1f1f1f;
-            border-radius: 4px;
+                background: #1e1e1e;
+                border-radius: 4px;
             }
             
             ul::-webkit-scrollbar-thumb {
-            background-color: #525252;
-            border-radius: 4px;
-            border: 2px solid #1f1f1f;
+                background-color: #555;
+                border-radius: 4px;
+                border: 2px solid #1e1e1e;
             }
             
             ul {
-            scrollbar-width: thin;
-            scrollbar-color: #525252 #1f1f1f;
+                scrollbar-width: thin;
+                scrollbar-color: #555 #1e1e1e;
             }
             
             ul::-webkit-scrollbar-thumb:hover {
-            background-color: #737373;
-            }
-            "
+                background-color: #777;
+            }"
         </style>
-        <div class="relative w-60 z-20">
+
+        <div class="relative z-30 font-sans text-sm" node_ref=node_ref>
             <button
                 on:click=toggle
-                class="w-full text-left px-4 py-2 rounded-md text-white bg-gradient-to-t from-zinc-900 to-zinc-800 shadow-md border border-zinc-950 hover:from-zinc-800 hover:to-zinc-700 focus:outline-none"
+                class="w-full text-left px-4 py-2 rounded-lg text-white bg-gradient-to-b from-slate-800 to-slate-700 border border-slate-600 shadow-inner hover:from-slate-700 hover:to-slate-600 transition-colors duration-150"
             >
                 {
                     let options = options.clone();
                     move || {
+                        log!("Chosen option: {:?}", chosen_option.get());
                         options
                             .get(&chosen_option.get())
                             .cloned()
-                            .unwrap_or("Select an option".into())
+                            .unwrap_or("Select an option".to_string())
                     }
                 }
-                <span class="float-right">"▼"</span>
+                <span class="float-right text-xs text-slate-400">"▼"</span>
             </button>
 
-            <ul
-                class=move || {
-                    format!(
-                        "dropdown-transition absolute mt-1 w-full rounded-md bg-zinc-800 border border-zinc-950 shadow-lg max-h-80 overflow-auto {}",
-                        if is_open.get() { "open" } else { "" },
-                    )
-                }
-                node_ref=node_ref
-            >
+            <ul class=move || {
+                format!(
+                    "dropdown-transition absolute mt-2 w-full rounded-md bg-slate-800 border border-slate-600 shadow-xl max-h-72 overflow-auto backdrop-blur-sm ring-1 ring-black ring-opacity-20 {}",
+                    if is_open.get() { "open" } else { "" },
+                )
+            }>
                 {options
                     .into_iter()
                     .map(|(opt, text)| {
                         view! {
                             <li
                                 on:click=move |_| select_option(opt.clone())
-                                class="cursor-pointer px-4 py-2 hover:bg-zinc-700 text-white"
+                                class="cursor-pointer px-4 py-2 text-slate-100 hover:bg-slate-700 hover:text-white transition-colors duration-100"
                             >
                                 {text}
                             </li>
