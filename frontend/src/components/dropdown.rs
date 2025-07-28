@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-use leptos::{logging::log, prelude::*};
+use leptos::prelude::*;
 use leptos_use::on_click_outside;
 
 #[component]
 pub fn DropdownMenu<T>(options: HashMap<T, String>, chosen_option: RwSignal<T>) -> impl IntoView
 where
-    T: std::fmt::Debug + Clone + std::hash::Hash + Eq + Send + Sync + 'static,
+    T: Clone + std::hash::Hash + Eq + Send + Sync + 'static,
 {
     let node_ref = NodeRef::new();
     let is_open = RwSignal::new(false);
@@ -67,7 +67,6 @@ where
                 {
                     let options = options.clone();
                     move || {
-                        log!("Chosen option: {:?}", chosen_option.get());
                         options
                             .get(&chosen_option.get())
                             .cloned()
