@@ -25,6 +25,7 @@ fn I18nProvider(children: Children) -> impl IntoView {
         sync_html_tag_dir: true,
         // Update language on URL parameter when changes.
         set_language_to_url_param: true,
+        initial_language_from_url_param: true,
         // Set initial language of user from URL in local storage.
         initial_language_from_url_param_to_local_storage: true,
         // Get initial language from local storage if not found
